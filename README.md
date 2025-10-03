@@ -1,20 +1,58 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# 🌌 Insight XR  
+**Immersive STEM Education Web App**  
 
-# Run and deploy your AI Studio app
+Insight XR is an interactive and immersive STEM education platform designed to make learning complex scientific concepts engaging, hands-on, and fun.  
 
-This contains everything you need to run your app locally.
+---
 
-View your app in AI Studio: https://ai.studio/apps/drive/1Yp5WN8HqxSOA397f5S6fHJbsdJ-5ONUJ
+## 🚀 Features  
 
-## Run Locally
+### 🔬 Interactive Simulations  
+- **2D Circuit Simulator** – Explore **Ohm’s Law** in real time.  
+- **2D Wave Simulator** – Visualize **Electromagnetic Waves** dynamically.  
+- **3D Viewer (three.js)** – Interact with detailed models of:  
+  - 🌍 The **Solar System**  
+  - 🧬 A **DNA Double Helix**  
+  - ⚛️ A **Neon Atom**  
 
-**Prerequisites:**  Node.js
+### 🤖 AI-Powered Tutor (Gemini API)  
+- Chat with an **AI assistant** to get instant explanations.  
+- **Click on parts of 3D models** (planets, DNA bases, etc.) to trigger context-aware answers.  
 
+### 📚 Personalized Learning  
+- **Quiz Mode** – Test your knowledge with topic-specific quizzes.  
+- **AI Review Mode** – Auto-generates a **summary** and a unique **quiz question** on a random STEM concept.  
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### 🏆 User Progression  
+- Mock **authentication & profiles** to track progress.  
+- **Statistics dashboard** with earned achievement medals for completed modules.  
+
+---
+
+## 🖼️ Screenshots  
+*(Add screenshots or GIFs here to showcase the simulators and AI tutor in action)*  
+
+---
+
+## 🛠️ Tech Stack  
+- **Frontend:** React + Three.js  
+- **Backend:** Node.js / Express (mock auth & data)  
+- **AI Integration:** Gemini API  
+- **Styling:** TailwindCSS  
+
+---
+
+## 📦 Installation  
+
+```bash
+# Clone the repository
+git clone https://github.com/your-username/insight-xr.git
+
+# Navigate into the project
+cd insight-xr
+
+# Install dependencies
+npm install
+
+# Run the development server
+npm run dev

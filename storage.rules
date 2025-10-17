@@ -1,0 +1,32 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Helper function
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // User avatars
+    match /avatars/{userId}.{extension} {
+      // Anyone authenticated can read avatars
+      allow read: if isAuthenticated();
+      
+      // Users can only upload their own avatar
+      allow write: if isOwner(userId) &&
+                      request.resource.size < 5 * 1024 * 1024 && // Max 5MB
+                      request.resource.contentType.matches('image/.*');
+    }
+    
+    // User uploaded content (if needed in future)
+    match /user-content/{userId}/{allPaths=**} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(userId) && 
+                      request.resource.size < 10 * 1024 * 1024; // Max 10MB
+    }
+  }
+}

@@ -1,0 +1,12 @@
+[phases.setup]
+nixPkgs = ["openjdk17"]
+
+[phases.build]
+cmds = [
+  "cd java-leaderboard",
+  "mkdir -p bin",
+  "javac -cp 'libs/*:src' -d bin src/com/insightxr/App.java src/com/insightxr/FirebaseInit.java src/com/insightxr/service/*.java"
+]
+
+[start]
+cmd = "cd java-leaderboard && java -cp 'libs/*:bin' com.insightxr.App"

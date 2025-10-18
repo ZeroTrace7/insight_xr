@@ -1,6 +1,6 @@
 [build]
 builder = "DOCKERFILE"
-dockerfilePath = "java-leaderboard/Dockerfile"
+dockerfilePath = "Dockerfile"
 
 [deploy]
 startCommand = "java -cp 'libs/*:bin' com.insightxr.App"

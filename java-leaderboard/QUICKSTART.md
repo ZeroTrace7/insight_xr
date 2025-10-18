@@ -42,11 +42,9 @@ You should see JSON with mock users:
 }
 ```
 
-### Integration with Your Vercel App
+### Integration with Your Frontend
 
-The service has CORS enabled for:
-- https://insight-xr.vercel.app
-- http://localhost:* (for local development)
+The service has CORS enabled for all origins, making it easy to connect from your local frontend.
 
 In your frontend (TypeScript/React), fetch the leaderboard:
 
@@ -71,13 +69,6 @@ The service will automatically detect the credentials and connect to Firestore.
 ### Auto-Updates
 
 The leaderboard automatically recomputes every 10 minutes in the background.
-
-### Deployment
-
-For production:
-- Deploy to Google Cloud Run, AWS ECS, or similar
-- Set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable
-- The service listens on the `PORT` environment variable (defaults to 8080)
 
 ### Troubleshooting
 

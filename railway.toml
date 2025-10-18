@@ -1,7 +1,0 @@
-[build]
-builder = "NIXPACKS"
-
-[deploy]
-startCommand = "cd java-leaderboard && java -cp 'libs/*:bin' com.insightxr.App"
-restartPolicyType = "ON_FAILURE"
-restartPolicyMaxRetries = 10

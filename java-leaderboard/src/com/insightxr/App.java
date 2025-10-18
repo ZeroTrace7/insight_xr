@@ -120,15 +120,8 @@ public class App {
     }
 
     private static void setCorsHeaders(HttpExchange ex) {
-        String origin = ex.getRequestHeaders().getFirst("Origin");
-        // Allow Vercel app and local dev by default; tighten as needed
-        if (origin == null) origin = "*";
-        if (origin.endsWith("insight-xr.vercel.app") || origin.startsWith("http://localhost")) {
-            ex.getResponseHeaders().set("Access-Control-Allow-Origin", origin);
-        } else {
-            ex.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
-        }
-        ex.getResponseHeaders().set("Vary", "Origin");
+        // Allow all origins for local development
+        ex.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
         ex.getResponseHeaders().set("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
         ex.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type,Authorization");
         ex.getResponseHeaders().set("Access-Control-Max-Age", "86400");

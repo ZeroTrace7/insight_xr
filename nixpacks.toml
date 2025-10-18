@@ -3,9 +3,8 @@ nixPkgs = ["openjdk17"]
 
 [phases.build]
 cmds = [
-  "cd java-leaderboard",
-  "mkdir -p bin",
-  "javac -cp 'libs/*:src' -d bin src/com/insightxr/App.java src/com/insightxr/FirebaseInit.java src/com/insightxr/service/*.java"
+  "mkdir -p java-leaderboard/bin",
+  "cd java-leaderboard && javac -cp 'libs/*:src' -d bin src/com/insightxr/App.java src/com/insightxr/FirebaseInit.java src/com/insightxr/service/ILeaderboard.java src/com/insightxr/service/LeaderboardService.java src/com/insightxr/service/InMemoryLeaderboardService.java"
 ]
 
 [start]

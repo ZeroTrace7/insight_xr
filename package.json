@@ -1,0 +1,25 @@
+{
+  "name": "insight_xr",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:leaderboard\" --names \"VITE,JAVA\" --prefix-colors \"cyan,green\"",
+    "dev:frontend": "vite",
+    "dev:leaderboard": "cd java-leaderboard && powershell -NoProfile -ExecutionPolicy Bypass -File test-run.ps1",
+    "leaderboard": "cd java-leaderboard && powershell -NoProfile -ExecutionPolicy Bypass -File test-run.ps1",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@google/genai": "^0.15.0",
+    "firebase": "^10.12.2",
+    "three": "^0.167.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "concurrently": "^9.2.1",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  }
+}

@@ -225,9 +225,7 @@ LeaderboardEntry lastPlayer = entries.getLast();  // Instead of get(size()-1)
 - [ ] Consider using Java 21 HTTP Client instead of HttpServer
 
 ### Documentation Updates
-- [ ] Update README.md with Java 21 requirement
-- [ ] Document Java 21 feature usage
-- [ ] Update deployment guides
+- [ ] Document Java 21 feature usage in code comments
 
 ---
 

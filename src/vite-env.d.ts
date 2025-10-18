@@ -1,7 +1,6 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly VITE_LEADERBOARD_API_URL: string
   readonly FIREBASE_API_KEY: string
   readonly FIREBASE_AUTH_DOMAIN: string
   readonly FIREBASE_PROJECT_ID: string

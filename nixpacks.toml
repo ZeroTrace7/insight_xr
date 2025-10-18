@@ -1,5 +1,13 @@
+[variables]
+NIXPACKS_NO_MUSL = "1"
+
 [phases.setup]
 nixPkgs = ["openjdk17"]
+aptPkgs = []
+
+[phases.install]
+# Skip npm install
+cmds = ["echo 'Skipping npm install - Java project only'"]
 
 [phases.build]
 cmds = [

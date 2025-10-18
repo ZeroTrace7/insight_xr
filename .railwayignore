@@ -1,0 +1,17 @@
+# Ignore frontend files - we only want to deploy the Java backend
+node_modules/
+package.json
+package-lock.json
+index.html
+index.css
+index.tsx
+vite.config.ts
+tsconfig.json
+*.md
+.git/
+.vscode/
+insightxr-backend/
+src/
+
+# Only include java-leaderboard
+!java-leaderboard/

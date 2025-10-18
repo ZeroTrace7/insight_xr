@@ -17,7 +17,7 @@ import {
     getAdditionalUserInfo,
     updateProfile
 } from 'firebase/auth';
-import { doc, setDoc, updateDoc } from 'firebase/firestore';
+import { doc, setDoc, updateDoc, collection, addDoc } from 'firebase/firestore';
 import { ref, uploadString, getDownloadURL } from 'firebase/storage';
 
 // --- Default Profile Avatars (5 options) ---
@@ -449,6 +449,9 @@ const themeToggleButton = document.getElementById('theme-toggle-button') as HTML
 const reviewActionCard = document.getElementById('review-action-card') as HTMLDivElement;
 const quizActionCard = document.getElementById('quiz-action-card') as HTMLDivElement;
 
+// Leaderboard
+const leaderboardList = document.getElementById('leaderboard-list') as HTMLDivElement;
+const refreshLeaderboardButton = document.getElementById('refresh-leaderboard-button') as HTMLButtonElement;
 
 // Home Page Module Cards
 const emModuleCard = document.getElementById('em-module-card');
@@ -1012,6 +1015,9 @@ function initializeApp() {
     reviewAnotherTopicButton.addEventListener('click', startReviewSession);
     reviewReturnHomeButton.addEventListener('click', () => navigateTo('home'));
     
+    // Leaderboard
+    refreshLeaderboardButton.addEventListener('click', loadLeaderboard);
+    
     // Apply initial theme
     applyInitialTheme();
 
@@ -1311,6 +1317,11 @@ function navigateTo(pageName: PageName) {
     } else if (pageName === 'detail' || pageName === 'quiz' || pageName === 'review') {
         // Keep home active when on sub-pages
         navButtons.home.classList.add('active');
+    }
+    
+    // Load leaderboard when navigating to home page
+    if (pageName === 'home') {
+        loadLeaderboard();
     }
 }
 
@@ -1743,7 +1754,7 @@ function handleNextQuestion() {
     }
 }
 
-function showQuizResults() {
+async function showQuizResults() {
     if (!currentQuizTopic) return;
     const questions = questionBank[currentQuizTopic];
     
@@ -1754,6 +1765,24 @@ function showQuizResults() {
     quizPageSubtitle.textContent = `Here's how you did on the ${moduleData[currentQuizTopic].title} quiz.`;
     
     quizScore.textContent = `You scored ${score} out of ${questions.length}!`;
+    
+    // ✨ NEW: Save quiz result to Firestore for leaderboard
+    if (currentUser && db) {
+        try {
+            await addDoc(collection(db, 'quizResults'), {
+                userId: currentUser.uid,
+                userName: currentUser.displayName || currentUser.email?.split('@')[0] || 'Anonymous',
+                score: score,
+                topic: currentQuizTopic,
+                timestamp: Date.now(),
+                totalQuestions: questions.length,
+                percentage: Math.round((score / questions.length) * 100)
+            });
+            console.log('✅ Quiz result saved to Firestore!');
+        } catch (error) {
+            console.error('❌ Error saving quiz result:', error);
+        }
+    }
     
     quizReviewList.innerHTML = '';
     userAnswers.forEach((answer, index) => {
@@ -2077,6 +2106,75 @@ function addMessageToHistory(message: string, sender: 'user' | 'ai', isError = f
 function setChatLoading(isLoading: boolean) {
     chatInput.disabled = isLoading;
     chatSubmitButton.disabled = isLoading;
+}
+
+// --- Leaderboard Logic ---
+interface LeaderboardEntry {
+    userId: string;
+    totalScore: number;
+}
+
+interface Leaderboard {
+    generatedAt: number;
+    entries: LeaderboardEntry[];
+}
+
+async function loadLeaderboard() {
+    try {
+        leaderboardList.innerHTML = `
+            <div class="leaderboard-loading">
+                <div class="spinner"></div>
+                <p>Loading leaderboard...</p>
+            </div>
+        `;
+
+        const response = await fetch('http://localhost:8080/leaderboard/latest');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const leaderboard: Leaderboard = await response.json();
+
+        if (leaderboard.entries.length === 0) {
+            leaderboardList.innerHTML = `
+                <div class="leaderboard-empty">
+                    <p>No leaderboard data available yet.</p>
+                    <p>Complete quizzes to appear on the leaderboard!</p>
+                </div>
+            `;
+            return;
+        }
+
+        leaderboardList.innerHTML = '';
+        leaderboard.entries.forEach((entry, index) => {
+            const rank = index + 1;
+            const item = document.createElement('div');
+            item.className = 'leaderboard-item';
+            
+            let rankClass = '';
+            if (rank === 1) rankClass = 'top-1';
+            else if (rank === 2) rankClass = 'top-2';
+            else if (rank === 3) rankClass = 'top-3';
+
+            item.innerHTML = `
+                <div class="leaderboard-rank ${rankClass}">#${rank}</div>
+                <div class="leaderboard-user">${entry.userId}</div>
+                <div class="leaderboard-score">${entry.totalScore}</div>
+            `;
+            
+            leaderboardList.appendChild(item);
+        });
+
+    } catch (error) {
+        console.error('Error loading leaderboard:', error);
+        leaderboardList.innerHTML = `
+            <div class="leaderboard-empty">
+                <p>Unable to load leaderboard.</p>
+                <p>Make sure the leaderboard service is running.</p>
+            </div>
+        `;
+    }
 }
 
 // --- Profile Page Logic ---

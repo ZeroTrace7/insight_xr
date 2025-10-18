@@ -1,0 +1,5 @@
+com\insightxr\App.class
+com\insightxr\service\InMemoryLeaderboardService.class
+com\insightxr\service\ILeaderboard.class
+com\insightxr\FirebaseInit.class
+com\insightxr\service\LeaderboardService.class

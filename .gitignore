@@ -12,6 +12,21 @@ dist
 dist-ssr
 *.local
 
+# Environment variables
+.env
+.env.local
+.env.production
+
+# Firebase Admin SDK (NEVER commit this!)
+serviceAccountKey.json
+**/serviceAccountKey.json
+serviceAccount.json
+**/serviceAccount.json
+
+# Java compiled files
+java-leaderboard/bin/
+java-leaderboard/*.class
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

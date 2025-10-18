@@ -22,31 +22,37 @@
 
 ##  Features
 
-###  7 Interactive 3D Modules
-Physics (Ohm's Law, EM Waves) | Biology (DNA, Photosynthesis) | Chemistry (Neon Atom) | Astronomy (Solar System) | Programming (Java)
+### 🎓 Immersive Learning Modules (7)
+- ⚡ Ohm's Law Circuit: Live V=IR calculations, voltage/resistance sliders, visual bulb brightness
+- 🌊 Electromagnetic Waves: 3D waveforms with frequency and amplitude controls, wavelength preview
+- 🧬 DNA Helix: Color-coded base pairs, smooth auto-rotation, click-to-explain interactions
+- 🌿 Photosynthesis: Animated energy flow, chloroplast focus, inputs/outputs made visual
+- ⚛️ Neon Atom: Proton/neutron nucleus, electron cloud, interactive orbital hints
+- 🌌 Solar System: 8 planets + Sun, orbit paths, tap any planet for beautiful info cards
+- 💻 Java Basics: Built-in editor, syntax help, AI suggestions for beginners
 
-###  AI Tutor (Gemini 2.5 Flash)
-STEM expertise, code debugging, 24/7 availability
+### 🤖 AI Tutor (Gemini 2.5 Flash)
+- Context-aware STEM explanations with simple analogies
+- Code debugging help and step-by-step reasoning
+- Friendly, patient tone with multi-turn chat memory
+- Works across Physics, Chemistry, Biology, Astronomy, and Programming
 
-###  10+ Achievements
-First Steps, Bookworm, On Fire, Scholar, Perfect Score, and more
+### 🏆 Achievements & Progress
+- 10+ unlockable achievements (First Steps, Bookworm, On Fire, Scholar, Perfect Score)
+- Daily streaks and point system to keep motivation high
+- Personal dashboard with progress over time
 
-###  70+ Quiz Questions
-Instant feedback, detailed explanations, performance analytics
+### 🧪 Quizzes That Teach
+- 70+ questions across modules with instant feedback
+- Clear explanations after each answer to reinforce learning
+- Performance analytics and history to track improvement
 
-###  3 User Roles
-Student, Teacher, Admin with role-based permissions
+### 👥 Roles & Access
+- 🎓 Students: Learn, quiz, chat with AI, earn achievements
+- 👨‍🏫 Teachers: View student progress and insights
+- 🔑 Admins: Manage users and configuration
 
-##  Quick Start
-
-```bash
-git clone https://github.com/yourusername/insight-xr.git
-cd insight-xr
-npm install
-
-# Create .env.local with your API keys
-npm run dev  # http://localhost:5173
-```
+<!-- Quick Start removed per request -->
 
 ##  Tech Stack
 
@@ -54,26 +60,13 @@ npm run dev  # http://localhost:5173
 **Backend**: Firebase (Auth, Firestore, Storage)  
 **AI**: Google Gemini 2.5 Flash
 
-##  Structure
-
-```
-insight-xr/
- index.tsx               # Main app
- index.css               # Styling
- firebase.ts             # Firebase config
- insightxr-backend/      # Backend services
-    src/services/
-    docs/               # Documentation
- package.json
-```
+<!-- Structure section removed per request -->
 
 ##  Security
 
 Firestore & Storage rules with role-based access control
 
-##  Documentation
-
-See `insightxr-backend/docs/` for detailed guides
+<!-- Documentation section removed per request -->
 
 ##  License
 

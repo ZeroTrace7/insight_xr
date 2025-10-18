@@ -6,7 +6,7 @@ import { GoogleGenAI, Chat, Type } from '@google/genai';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { TubeGeometry } from 'three/src/geometries/TubeGeometry.js';
-import { auth, db, storage, googleProvider, isFirebaseConfigured } from './firebase';
+import { auth, db, storage, googleProvider, isFirebaseConfigured } from './insightxr-backend/src/firebase';
 import { 
     User, 
     onAuthStateChanged, 

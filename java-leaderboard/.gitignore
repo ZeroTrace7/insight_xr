@@ -1,0 +1,16 @@
+# Java
+*.class
+*.jar
+!libs/*.jar
+target/
+bin/
+
+# IDE
+.settings/
+.factorypath
+
+# Maven
+dependency-reduced-pom.xml
+
+# Logs
+*.log

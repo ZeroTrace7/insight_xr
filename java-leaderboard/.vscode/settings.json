@@ -1,0 +1,10 @@
+{
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.compile.nullAnalysis.mode": "disabled",
+  "java.project.sourcePaths": ["src"],
+  "java.project.outputPath": "bin",
+  "java.project.referencedLibraries": [
+    "libs/**/*.jar",
+    "target/libs/**/*.jar"
+  ]
+}

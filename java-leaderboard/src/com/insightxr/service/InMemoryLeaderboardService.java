@@ -9,16 +9,16 @@ public class InMemoryLeaderboardService implements ILeaderboard {
 
     public InMemoryLeaderboardService() {
         // seed with a few demo users
-        totals.put("demo-alice", 120);
-        totals.put("demo-bob", 95);
-        totals.put("demo-charlie", 70);
+        totals.put("Manoj Sir", 120);
+        totals.put("Yash Raj", 95);
+        totals.put("Shreyash", 70);
     }
 
     public void computeAndStoreDailyLeaderboard(int topN) throws ExecutionException, InterruptedException {
         // In-memory: pretend we recomputed; maybe add a small random delta
-        totals.computeIfPresent("demo-alice", (k,v) -> v + new Random().nextInt(5));
-        totals.computeIfPresent("demo-bob", (k,v) -> v + new Random().nextInt(5));
-        totals.computeIfPresent("demo-charlie", (k,v) -> v + new Random().nextInt(5));
+        totals.computeIfPresent("Manoj Sir", (k,v) -> v + new Random().nextInt(5));
+        totals.computeIfPresent("Yash Raj", (k,v) -> v + new Random().nextInt(5));
+        totals.computeIfPresent("Shreyash", (k,v) -> v + new Random().nextInt(5));
     }
 
     public String getLatestLeaderboardJson() throws ExecutionException, InterruptedException {

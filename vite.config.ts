@@ -12,7 +12,20 @@ export default defineConfig(({ mode }) => {
         port: 5173,
         strictPort: false,
         host: true,
-        open: false
+        open: true,  // Auto-open browser
+        proxy: {
+          // Proxy API requests to Java backend
+          '/leaderboard': {
+            target: 'http://localhost:8080',
+            changeOrigin: true,
+            secure: false
+          },
+          '/trigger-leaderboard': {
+            target: 'http://localhost:8080',
+            changeOrigin: true,
+            secure: false
+          }
+        }
       },
       define: {
         'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),

@@ -6,11 +6,10 @@
   "scripts": {
     "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:leaderboard\" --names \"VITE,JAVA\" --prefix-colors \"cyan,green\" --kill-others-on-fail",
     "dev:frontend": "vite",
-    "dev:leaderboard": "cd java-leaderboard && powershell -NoProfile -ExecutionPolicy Bypass -File test-run.ps1",
+    "dev:leaderboard": "cd java-leaderboard && mvn compile exec:java -q",
     "build": "tsc && vite build",
     "build:java": "cd java-leaderboard && mvn clean package -DskipTests",
     "preview": "vite preview",
-    "leaderboard": "cd java-leaderboard && powershell -NoProfile -ExecutionPolicy Bypass -File test-run.ps1",
     "test": "echo \"No tests configured yet\" && exit 0"
   },
   "dependencies": {

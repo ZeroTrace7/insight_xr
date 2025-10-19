@@ -10,16 +10,11 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <firebase.admin.version>9.2.0</firebase.admin.version>
     </properties>
 
     <dependencies>
-        <!-- Firebase Admin SDK (brings Firestore and Google Cloud deps transitively) -->
-        <dependency>
-            <groupId>com.google.firebase</groupId>
-            <artifactId>firebase-admin</artifactId>
-            <version>${firebase.admin.version}</version>
-        </dependency>
+        <!-- No Firebase dependencies - using in-memory leaderboard only -->
+        <!-- Firebase Authentication is handled in the frontend -->
     </dependencies>
 
     <build>

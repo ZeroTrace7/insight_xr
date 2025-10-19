@@ -2128,7 +2128,7 @@ async function loadLeaderboard() {
             </div>
         `;
 
-        const response = await fetch('http://localhost:8080/leaderboard/latest');
+        const response = await fetch('/leaderboard/latest');
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);

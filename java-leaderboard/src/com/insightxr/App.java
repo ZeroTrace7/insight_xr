@@ -1,10 +1,7 @@
 package com.insightxr;
 
 import com.insightxr.service.ILeaderboard;
-import com.insightxr.service.LeaderboardService;
 import com.insightxr.service.InMemoryLeaderboardService;
-import com.google.cloud.firestore.Firestore;
-import com.google.firebase.cloud.FirestoreClient;
 
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpExchange;
@@ -14,29 +11,11 @@ import java.nio.charset.StandardCharsets;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        // init Firebase (best-effort)
-        boolean firebaseReady = false;
-        try {
-            FirebaseInit.init();
-            firebaseReady = true;
-        } catch (Throwable t) {
-            System.err.println("[warning] Firebase init failed: " + t.getMessage());
-        }
-
+        // Use in-memory leaderboard only (Firebase removed for leaderboard)
         final ILeaderboard[] svcRef = new ILeaderboard[1];
-        if (firebaseReady) {
-            try {
-                Firestore db = FirestoreClient.getFirestore();
-                svcRef[0] = new LeaderboardService(db);
-            } catch (Throwable t) {
-                System.err.println("[warning] Firestore unavailable, using in-memory leaderboard: " + t.getMessage());
-                svcRef[0] = new InMemoryLeaderboardService();
-            }
-        } else {
-            svcRef[0] = new InMemoryLeaderboardService();
-        }
+        svcRef[0] = new InMemoryLeaderboardService();
 
-        // periodic auto-update (every 10 minutes)
+        // periodic auto-update (every 1 minute)
         Thread updater = new Thread(() -> {
             while (true) {
                 try {
@@ -45,7 +24,7 @@ public class App {
                 } catch (Exception e) {
                     System.err.println("[leaderboard] update failed: " + e.getMessage());
                 }
-                try { Thread.sleep(10 * 60 * 1000); } catch (InterruptedException ignored) {}
+                try { Thread.sleep(60 * 1000); } catch (InterruptedException ignored) {}
             }
         });
         updater.setDaemon(false); // keep JVM alive

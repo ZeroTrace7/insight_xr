@@ -25,6 +25,7 @@ serviceAccount.json
 
 # Java compiled files
 java-leaderboard/bin/
+java-leaderboard/target/
 java-leaderboard/*.class
 
 # Editor directories and files

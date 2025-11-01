@@ -1,8 +1,5 @@
 package com.insightxr;
 
-import com.insightxr.service.ILeaderboard;
-import com.insightxr.service.InMemoryLeaderboardService;
-
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpExchange;
 import java.net.InetSocketAddress;
@@ -11,11 +8,9 @@ import java.nio.charset.StandardCharsets;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        // Use in-memory leaderboard only (Firebase removed for leaderboard)
         final ILeaderboard[] svcRef = new ILeaderboard[1];
         svcRef[0] = new InMemoryLeaderboardService();
 
-        // periodic auto-update (every 1 minute)
         Thread updater = new Thread(() -> {
             while (true) {
                 try {
@@ -24,15 +19,22 @@ public class App {
                 } catch (Exception e) {
                     System.err.println("[leaderboard] update failed: " + e.getMessage());
                 }
-                try { Thread.sleep(60 * 1000); } catch (InterruptedException ignored) {}
+                try { 
+                    Thread.sleep(60 * 1000); 
+                } catch (InterruptedException ignored) {
+                    Thread.currentThread().interrupt();
+                }
             }
         });
-        updater.setDaemon(false); // keep JVM alive
+        updater.setDaemon(false);
         updater.start();
 
-        // start simple HTTP server
         int port = 8080;
-        try { port = Integer.parseInt(System.getenv().getOrDefault("PORT", "8080")); } catch (Exception ignored) {}
+        try { 
+            port = Integer.parseInt(System.getenv().getOrDefault("PORT", "8080")); 
+        } catch (NumberFormatException ignored) {
+            System.err.println("[warning] Invalid PORT value, using default: 8080");
+        }
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/trigger-leaderboard", (HttpExchange ex) -> {
             if (handleCorsPreflight(ex)) return;
@@ -73,17 +75,17 @@ public class App {
             }
         });
 
-        server.setExecutor(null); // use default executor
+        server.setExecutor(null);
         System.out.println("Leaderboard service running on port " + port);
+        System.out.println("Press Ctrl+C to stop the server");
         server.start();
         
-        // Keep server running indefinitely
-        System.out.println("Press Ctrl+C to stop the server");
         while (true) {
             try {
-                Thread.sleep(60000); // sleep 1 minute at a time
+                Thread.sleep(60000);
             } catch (InterruptedException e) {
                 System.out.println("Server shutting down...");
+                Thread.currentThread().interrupt();
                 break;
             }
         }
@@ -99,7 +101,6 @@ public class App {
     }
 
     private static void setCorsHeaders(HttpExchange ex) {
-        // Allow all origins for local development
         ex.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
         ex.getResponseHeaders().set("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
         ex.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type,Authorization");

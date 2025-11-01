@@ -7,7 +7,6 @@ import { Auth, getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { Firestore, getFirestore } from 'firebase/firestore';
 import { FirebaseStorage, getStorage } from 'firebase/storage';
 
-// Your web app's Firebase configuration will be loaded from environment variables
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
   authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -17,14 +16,12 @@ const firebaseConfig = {
   appId: process.env.FIREBASE_APP_ID
 };
 
-// --- Graceful Initialization ---
 let app: FirebaseApp | null = null;
 let auth: Auth | null = null;
 let db: Firestore | null = null;
 let storage: FirebaseStorage | null = null;
 const googleProvider = new GoogleAuthProvider();
 
-// Check if the essential configuration is present.
 export const isFirebaseConfigured = !!firebaseConfig.apiKey;
 
 if (isFirebaseConfigured) {
@@ -35,7 +32,6 @@ if (isFirebaseConfigured) {
     storage = getStorage(app);
   } catch (error) {
     console.error("Firebase initialization failed:", error);
-    // If initialization fails, ensure services are null.
     auth = null;
     db = null;
     storage = null;

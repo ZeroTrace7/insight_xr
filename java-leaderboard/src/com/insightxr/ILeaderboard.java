@@ -1,4 +1,4 @@
-package com.insightxr.service;
+package com.insightxr;
 
 import java.util.concurrent.ExecutionException;
 

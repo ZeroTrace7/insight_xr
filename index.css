@@ -1392,6 +1392,11 @@ body.light-theme .achievement-badge.locked .badge-icon {
 
 
 @media (max-width: 992px) {
+    #auth-page {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
     .auth-container {
         grid-template-columns: 1fr;
         max-width: 450px;
@@ -1399,12 +1404,14 @@ body.light-theme .achievement-badge.locked .badge-icon {
         background-color: transparent;
         border: none;
         box-shadow: none;
+        margin: 0 auto;
     }
     .auth-visual {
         display: none;
     }
     .auth-form-wrapper {
         flex-direction: column;
+        width: 100%;
     }
     .auth-header-mobile {
         display: block;
@@ -1414,6 +1421,7 @@ body.light-theme .achievement-badge.locked .badge-icon {
         border: 1px solid var(--border-color);
         border-radius: 16px;
         box-shadow: 0 8px 32px var(--shadow-color);
+        margin: 0 auto;
     }
 }
 

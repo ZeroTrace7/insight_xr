@@ -2,7 +2,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { defineConfig, loadEnv } from 'vite';
 
-// Fix: Define __dirname in ES module scope as it's not available by default.
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig(({ mode }) => {
@@ -12,9 +11,8 @@ export default defineConfig(({ mode }) => {
         port: 5173,
         strictPort: false,
         host: true,
-        open: true,  // Auto-open browser
+        open: true,
         proxy: {
-          // Proxy API requests to Java backend
           '/leaderboard': {
             target: 'http://localhost:8080',
             changeOrigin: true,

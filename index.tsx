@@ -20,7 +20,6 @@ import {
 import { doc, setDoc, updateDoc, collection, addDoc } from 'firebase/firestore';
 import { ref, uploadString, getDownloadURL } from 'firebase/storage';
 
-// --- Default Profile Avatars (5 options) ---
 const DEFAULT_AVATARS = [
     'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4',
     'https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka&backgroundColor=c0aede',
@@ -29,12 +28,10 @@ const DEFAULT_AVATARS = [
     'https://api.dicebear.com/7.x/avataaars/svg?seed=Luna&backgroundColor=ffdfbf'
 ];
 
-// Function to get a random default avatar
 function getRandomAvatar(): string {
     return DEFAULT_AVATARS[Math.floor(Math.random() * DEFAULT_AVATARS.length)];
 }
 
-// --- 3D Viewer Class ---
 class ThreeDViewer {
     private scene: THREE.Scene;
     private camera: THREE.PerspectiveCamera;
@@ -79,7 +76,9 @@ class ThreeDViewer {
         requestAnimationFrame(this.animate.bind(this));
         this.controls.update();
         this.activeObjects.forEach(obj => {
-             if(obj.userData.update) obj.userData.update();
+             if (obj.userData.update) {
+                 obj.userData.update();
+             }
         });
         this.renderer.render(this.scene, this.camera);
     }
@@ -100,7 +99,6 @@ class ThreeDViewer {
         this.raycaster.setFromCamera(this.pointer, this.camera);
         const intersects = this.raycaster.intersectObjects(this.activeObjects, true);
 
-        // Reset the previously clicked object if it exists
         if (this.lastClicked) {
             const material = this.lastClicked.material as THREE.MeshStandardMaterial;
             if (this.lastClicked.userData.originalEmissive) {
@@ -112,9 +110,7 @@ class ThreeDViewer {
 
         if (intersects.length > 0) {
             const firstIntersect = intersects[0].object;
-             if (firstIntersect instanceof THREE.Mesh && firstIntersect.name) {
-                
-                // Highlight the new object if it's highlightable (i.e., has an emissive property)
+            if (firstIntersect instanceof THREE.Mesh && firstIntersect.name) {
                 const material = firstIntersect.material as THREE.MeshStandardMaterial;
                 if (material.emissive) {
                     this.lastClicked = firstIntersect;
@@ -122,7 +118,6 @@ class ThreeDViewer {
                     material.emissive.set(this.highlightColor);
                 }
                 
-                // Trigger the callback with the object's name
                 this.onObjectClick(firstIntersect.name);
             }
         }
@@ -135,11 +130,9 @@ class ThreeDViewer {
     public cleanup() {
         while (this.scene.children.length > 0) {
             const obj = this.scene.children[0];
-            // Traverse this object and its children to dispose of materials and geometries
             obj.traverse(child => {
                  if (child instanceof THREE.Mesh) {
                     child.geometry.dispose();
-                    // Check if material is an array before disposing
                     if (Array.isArray(child.material)) {
                         child.material.forEach(material => material.dispose());
                     } else {
@@ -150,9 +143,8 @@ class ThreeDViewer {
             this.scene.remove(obj);
         }
         this.activeObjects = [];
-        this.lastClicked = null; // Reset last clicked object to avoid dangling reference
+        this.lastClicked = null;
         
-        // Re-add essential lights
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
         this.scene.add(ambientLight);
         const pointLight = new THREE.PointLight(0xffffff, 2);
@@ -360,34 +352,26 @@ class ThreeDViewer {
             this.activeObjects.push(electron, orbitGroup);
         };
     
-        // --- Create Electrons based on Neon's configuration (1s², 2s², 2p⁶) ---
         const sOrbitalSpeed = 1.2;
         const pOrbitalSpeed = 1.0;
     
-        // 1s Orbital (2 electrons) - represented as two different orbital planes for visual clarity
         createElectronAndRing(8, "1s Electron", sOrbitalSpeed, new THREE.Euler(0, 0, 0), Math.random() * Math.PI * 2);
         createElectronAndRing(8, "1s Electron", sOrbitalSpeed, new THREE.Euler(Math.PI / 2, Math.PI / 3, 0), Math.random() * Math.PI * 2);
     
-        // 2s Orbital (2 electrons) - further out, also visually separated
         createElectronAndRing(16, "2s Electron", sOrbitalSpeed * 0.8, new THREE.Euler(0, Math.PI / 2, Math.PI / 4), Math.random() * Math.PI * 2);
         createElectronAndRing(16, "2s Electron", sOrbitalSpeed * 0.8, new THREE.Euler(0, -Math.PI / 2, -Math.PI / 4), Math.random() * Math.PI * 2);
     
-        // 2p Orbitals (6 electrons, 2 in each of 3 orthogonal p-orbitals)
-        const pz_rot = new THREE.Euler(0, 0, 0); // XY plane
-        const px_rot = new THREE.Euler(0, Math.PI / 2, 0); // YZ plane
-        const py_rot = new THREE.Euler(Math.PI / 2, 0, 0); // XZ plane
+        const pz_rot = new THREE.Euler(0, 0, 0);
+        const px_rot = new THREE.Euler(0, Math.PI / 2, 0);
+        const py_rot = new THREE.Euler(Math.PI / 2, 0, 0);
         
-        // 2 electrons in pz orbital (opposite each other)
         createElectronAndRing(16, "2p Electron", pOrbitalSpeed, pz_rot, 0);
         createElectronAndRing(16, "2p Electron", pOrbitalSpeed, pz_rot, Math.PI);
-        // 2 electrons in px orbital (opposite each other)
         createElectronAndRing(16, "2p Electron", pOrbitalSpeed, px_rot, 0);
         createElectronAndRing(16, "2p Electron", pOrbitalSpeed, px_rot, Math.PI);
-        // 2 electrons in py orbital (opposite each other)
         createElectronAndRing(16, "2p Electron", pOrbitalSpeed, py_rot, 0);
         createElectronAndRing(16, "2p Electron", pOrbitalSpeed, py_rot, Math.PI);
         
-        // Auto-rotation for the whole atom for a better view
         atomGroup.userData.update = () => {
             atomGroup.rotation.y += 0.001;
             atomGroup.rotation.x += 0.0005;
@@ -398,14 +382,9 @@ class ThreeDViewer {
 
     public loadPlaceholder(modelName: string) {
         this.cleanup();
-        // A placeholder for DNA / Atom models
     }
 }
 
-
-// --- DOM Element Selection ---
-
-// App Containers
 const authPage = document.getElementById('auth-page') as HTMLDivElement;
 const mainContent = document.querySelector('.main-content') as HTMLElement;
 const bottomNav = document.querySelector('.bottom-nav') as HTMLElement;

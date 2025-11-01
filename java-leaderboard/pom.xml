@@ -13,14 +13,11 @@
     </properties>
 
     <dependencies>
-        <!-- No Firebase dependencies - using in-memory leaderboard only -->
-        <!-- Firebase Authentication is handled in the frontend -->
     </dependencies>
 
     <build>
         <sourceDirectory>src</sourceDirectory>
         <plugins>
-            <!-- Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -36,7 +33,6 @@
                 </configuration>
             </plugin>
             
-            <!-- JAR Plugin - Create executable JAR -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -52,7 +48,6 @@
                 </configuration>
             </plugin>
             
-            <!-- Dependency Plugin - Copy dependencies -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -71,7 +66,6 @@
                 </executions>
             </plugin>
             
-            <!-- Exec Plugin - Run Java application -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>

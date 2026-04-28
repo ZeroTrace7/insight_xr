@@ -1,0 +1,48 @@
+-- MySQL schema for JDBC-backed quiz generator
+CREATE TABLE IF NOT EXISTS quizzes (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  user_id VARCHAR(128) NOT NULL,
+  topic VARCHAR(255) NOT NULL,
+  date_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS questions (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  quiz_id BIGINT NOT NULL,
+  question_text TEXT NOT NULL,
+  CONSTRAINT fk_questions_quiz FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS options (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  question_id BIGINT NOT NULL,
+  option_text VARCHAR(500) NOT NULL,
+  is_correct BOOLEAN NOT NULL DEFAULT FALSE,
+  CONSTRAINT fk_options_question FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS attempts (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  quiz_id BIGINT NOT NULL,
+  user_id VARCHAR(128) NOT NULL,
+  score INT NOT NULL,
+  total_questions INT NOT NULL,
+  submitted_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_attempt_user_quiz (quiz_id, user_id),
+  CONSTRAINT fk_attempts_quiz FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS question_bank (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  topic VARCHAR(255) NOT NULL,
+  question_text TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS question_bank_options (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  question_bank_id BIGINT NOT NULL,
+  option_text VARCHAR(500) NOT NULL,
+  is_correct BOOLEAN NOT NULL DEFAULT FALSE,
+  CONSTRAINT fk_qbo_qb FOREIGN KEY (question_bank_id) REFERENCES question_bank(id) ON DELETE CASCADE
+);
+

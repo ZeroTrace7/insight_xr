@@ -18,6 +18,11 @@ export default defineConfig(({ mode }) => {
             changeOrigin: true,
             secure: false
           },
+          '/quiz': {
+            target: 'http://localhost:8080',
+            changeOrigin: true,
+            secure: false
+          },
           '/trigger-leaderboard': {
             target: 'http://localhost:8080',
             changeOrigin: true,

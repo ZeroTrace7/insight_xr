@@ -834,6 +834,9 @@ let reviewUserAnswers: { question: string, selected: number, correct: number, op
 type ReviewQuizState = 'answering' | 'feedback';
 let reviewQuizState: ReviewQuizState = 'answering';
 
+const QUIZ_POINTS_PER_CORRECT = 10;
+const ASSIGNMENT_POINTS_PER_CORRECT = 8;
+
 
 // --- AI Chat Session Management ---
 function resetChatSession() {
@@ -1762,6 +1765,8 @@ async function showQuizResults() {
             console.error('❌ Error saving quiz result:', error);
         }
     }
+
+    await awardPointsToLeaderboard('quiz', score, questions.length);
     
     quizReviewList.innerHTML = '';
     userAnswers.forEach((answer, index) => {
@@ -1971,11 +1976,11 @@ function handleNextReviewQuestion() {
     if (currentReviewQuestionIndex < reviewQuestions.length) {
         displayReviewQuestion();
     } else {
-        showReviewResults();
+        void showReviewResults();
     }
 }
 
-function showReviewResults() {
+async function showReviewResults() {
     reviewActiveSession.classList.add('hidden');
     reviewResultsView.classList.remove('hidden');
 
@@ -2006,6 +2011,9 @@ function showReviewResults() {
         `;
         reviewReviewList.appendChild(reviewItem);
     });
+
+    // Treat review completion as assignment points for leaderboard updates.
+    await awardPointsToLeaderboard('assignment', reviewScore, reviewQuestions.length);
 }
 
 
@@ -2090,12 +2098,51 @@ function setChatLoading(isLoading: boolean) {
 // --- Leaderboard Logic ---
 interface LeaderboardEntry {
     userId: string;
+    userName?: string;
     totalScore: number;
 }
 
 interface Leaderboard {
     generatedAt: number;
     entries: LeaderboardEntry[];
+}
+
+function getLeaderboardUserName(): string {
+    if (!currentUser) return 'Anonymous';
+    return currentUser.displayName || currentUser.email?.split('@')[0] || 'Anonymous';
+}
+
+async function awardPointsToLeaderboard(activityType: 'quiz' | 'assignment', correctAnswers: number, totalQuestions: number) {
+    if (!currentUser) return;
+
+    const pointsPerCorrect = activityType === 'quiz' ? QUIZ_POINTS_PER_CORRECT : ASSIGNMENT_POINTS_PER_CORRECT;
+    const points = Math.max(0, correctAnswers * pointsPerCorrect);
+    if (points === 0) return;
+
+    try {
+        const response = await fetch('/leaderboard/award', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                userId: currentUser.uid,
+                userName: getLeaderboardUserName(),
+                points,
+                activityType,
+                correctAnswers,
+                totalQuestions,
+                awardedAt: Date.now(),
+            }),
+        });
+
+        if (!response.ok) {
+            const errText = await response.text();
+            throw new Error(errText || `HTTP ${response.status}`);
+        }
+
+        await loadLeaderboard();
+    } catch (error) {
+        console.error(`Failed to award ${activityType} points to leaderboard:`, error);
+    }
 }
 
 async function loadLeaderboard() {
@@ -2119,7 +2166,7 @@ async function loadLeaderboard() {
             leaderboardList.innerHTML = `
                 <div class="leaderboard-empty">
                     <p>No leaderboard data available yet.</p>
-                    <p>Complete quizzes to appear on the leaderboard!</p>
+                    <p>Complete quizzes or assignments to earn points!</p>
                 </div>
             `;
             return;
@@ -2138,7 +2185,7 @@ async function loadLeaderboard() {
 
             item.innerHTML = `
                 <div class="leaderboard-rank ${rankClass}">#${rank}</div>
-                <div class="leaderboard-user">${entry.userId}</div>
+                <div class="leaderboard-user">${entry.userName || entry.userId}</div>
                 <div class="leaderboard-score">${entry.totalScore}</div>
             `;
             
